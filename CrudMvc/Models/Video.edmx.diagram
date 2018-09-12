@@ -6,6 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="1a5f7ab7326a4acead7cdd76add69166" Name="Diagram1">
         <EntityTypeShape EntityType="VideoModel.Movy" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="VideoModel.MovieGroup" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -26,5 +26,6 @@ namespace CrudMvc.Models
         }
     
         public virtual DbSet<Movy> Movies { get; set; }
+        public virtual DbSet<MovieGroup> MovieGroups { get; set; }
     }
 }

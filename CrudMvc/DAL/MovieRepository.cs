@@ -15,6 +15,10 @@ namespace CrudMvc.DAL
             context = _context;
         }
 
+        public IQueryable<Movy> getMoviesPaging()
+        {
+            return context.Movies.OrderBy(p=>p.Id);
+        }
         public void DeleteMovie(int MovieID)
         {
             Movy movie = context.Movies.Where(p => p.Id == MovieID).FirstOrDefault();
