@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 
 namespace CrudMvc.Controllers
 {
+    //[Authorize]
     public class MoviesController : ApiController
     {
         private readonly MovieRepository repo;
@@ -71,97 +72,98 @@ namespace CrudMvc.Controllers
 
         }
 
-        //// GET: api/Movies/5
-        //[ResponseType(typeof(Movy))]
-        //public IHttpActionResult GetMovy(int id)
-        //{
-        //    Movy movy = db.Movies.Find(id);
-        //    if (movy == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: api/Movies/5
+        [ResponseType(typeof(Movy))]
+        public IHttpActionResult GetMovy(int id)
+        {
+            Movy movy = repo.GetMovieByID(id);
+            if (movy == null)
+            {
+                return NotFound();
+            }
 
-        //    return Ok(movy);
-        //}
+            return Ok(movy);
+        }
 
-        //// PUT: api/Movies/5
-        //[ResponseType(typeof(void))]
-        //public IHttpActionResult PutMovy(int id, Movy movy)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        // PUT: api/Movies/5
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutMovy(int id, Movy movy)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    if (id != movy.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+            if (id != movy.Id)
+            {
+                return BadRequest();
+            }
 
-        //    db.Entry(movy).State = EntityState.Modified;
+            repo.UpdateMovie(movy);
 
-        //    try
-        //    {
-        //        db.SaveChanges();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!MovyExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            try
+            {
+                repo.Save();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MovyExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-        //    return StatusCode(HttpStatusCode.NoContent);
-        //}
+            return StatusCode(HttpStatusCode.NoContent);
+        }
 
-        //// POST: api/Movies
-        //[ResponseType(typeof(Movy))]
-        //public IHttpActionResult PostMovy(Movy movy)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        // POST: api/Movies
+        [ResponseType(typeof(Movy))]
+        public IHttpActionResult PostMovy(Movy movy)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    db.Movies.Add(movy);
-        //    db.SaveChanges();
+            repo.InsertMovie(movy);
+            repo.Save();
 
-        //    return CreatedAtRoute("DefaultApi", new { id = movy.Id }, movy);
-        //}
+            return CreatedAtRoute("DefaultApi", new { id = movy.Id }, movy);
+        }
 
-        //// DELETE: api/Movies/5
-        //[ResponseType(typeof(Movy))]
-        //public IHttpActionResult DeleteMovy(int id)
-        //{
-        //    Movy movy = db.Movies.Find(id);
-        //    if (movy == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // DELETE: api/Movies/5
+        [ResponseType(typeof(Movy))]
+        public IHttpActionResult DeleteMovy(int id)
+        {
+            Movy movy = repo.GetMovieByID(id);
+            if (movy == null)
+            {
+                return NotFound();
+            }
 
-        //    db.Movies.Remove(movy);
-        //    db.SaveChanges();
+            repo.DeleteMovie(id);
+            repo.Save();
 
-        //    return Ok(movy);
-        //}
+            return Ok(movy);
+        }
 
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                repo.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-        //private bool MovyExists(int id)
-        //{
-        //    return db.Movies.Count(e => e.Id == id) > 0;
-        //}
+        private bool MovyExists(int id)
+        {
+            //return db.Movies.Count(e => e.Id == id) > 0;
+            return false;
+        }
     }
 }

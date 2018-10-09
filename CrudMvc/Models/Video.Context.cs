@@ -12,6 +12,8 @@ namespace CrudMvc.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class VideoEntities : DbContext
     {
@@ -27,5 +29,18 @@ namespace CrudMvc.Models
     
         public virtual DbSet<Movy> Movies { get; set; }
         public virtual DbSet<MovieGroup> MovieGroups { get; set; }
+    
+        public virtual ObjectResult<LoginByUsernamePassword_Result> LoginByUsernamePassword(string username, string password)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LoginByUsernamePassword_Result>("LoginByUsernamePassword", usernameParameter, passwordParameter);
+        }
     }
 }
